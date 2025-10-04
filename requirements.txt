@@ -1,0 +1,4 @@
+paramiko
+jinja2
+mkdocs
+mkdocs-material

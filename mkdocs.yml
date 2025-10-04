@@ -1,0 +1,9 @@
+site_name: OCF Infra
+theme:
+  name: material
+nav:
+  - Home: index.md
+  - Servers: servers.md
+markdown_extensions:
+  - tables
+  - admonition

@@ -1,0 +1,60 @@
+# OCF Servers
+
+_Last updated: {{ generated_at }}_
+
+## Hosts (Hypervisors / Physical)
+
+{% if hosts %}
+{% for h in hosts %}
+### {{ h.name }}
+- **IP(s):** {{ h.ips|join(", ") if h.ips else "—" }}
+- **Type:** {{ h.type or "host" }}
+- **Description:** {{ h.description or "—" }}
+
+{% if h.guests %}
+<details>
+<summary>Guests ({{ h.guests|length }})</summary>
+
+| Guest | IP(s) | Type | Description |
+|------|-------|------|-------------|
+{% for g in h.guests -%}
+| {{ g.name }} | {{ g.ips|join("<br>") if g.ips else "—" }} | {{ g.type or "guest" }} | {{ g.description or "—" }} |
+{% endfor %}
+</details>
+{% endif %}
+
+---
+{% endfor %}
+{% else %}
+_No hosts found._
+{% endif %}
+
+## Other Standalone Systems
+
+{% if others %}
+| Name | IP(s) | Type | Description |
+|------|-------|------|-------------|
+{% for n in others -%}
+| {{ n.name }} | {{ n.ips|join("<br>") if n.ips else "—" }} | {{ n.type or "—" }} | {{ n.description or "—" }} |
+{% endfor %}
+{% else %}
+_No standalone systems._
+{% endif %}
+
+## Unassigned IPv4 Addresses
+
+Main block(s): {{ main_blocks|join(", ") if main_blocks else "(not configured)" }}
+
+{{ unassigned_count }} address{{ "es" if unassigned_count != 1 else "" }} currently unassigned.
+
+{% for block, ips in unassigned.items() %}
+### {{ block }}
+{% if ips and ips|length <= 256 %}
+{{ ips|join(", ") }}
+{% elif ips %}
+`{{ ips|length }}` free (too many to list)
+{% else %}
+_No free IPs in this block._
+{% endif %}
+
+{% endfor %}
